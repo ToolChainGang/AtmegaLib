@@ -66,71 +66,71 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-//
-// MCP4131
-//
+//
+// MCP4131
+//
 #if 0
 #include "MCP4131.h"
 
 #define TestPot_PORT                        D
 #define TestPot_BIT                         3
 #define TestPot_MAXR                    50000
-#define TestPot_MAX_WIPER   (MCP4131_STEPS-1)
-
-#define TestPotInit             MCP4131Init(TestPot_PORT,TestPot_BIT)
+#define TestPot_MAX_WIPER   (MCP4131_STEPS-1)
+
+#define TestPotInit             MCP4131Init(TestPot_PORT,TestPot_BIT)
 #define TestPotSetWiper(_w_)    MCP4131SetWiper(TestPot_PORT,TestPot_BIT,_w_)
 #define TestPotSetResist(_r_)   MCP4131SetResist(TestPot_PORT,TestPot_BIT,TestPot_MAXR,_r_)
 #define TestPotIncr             MCP4131Incr(TestPot_PORT,TestPot_BIT)
 #define TestPotDecr             MCP4131Decr(TestPot_PORT,TestPot_BIT)
-
-#define TestPotR2W(_r_)         MCP4131_R2W(TestPot_MAXR,_r_)
-#define TestPotW2R(_w_)         MCP4131_W2R(TestPot_MAXR,_w_)
+
+#define TestPotR2W(_r_)         MCP4131_R2W(TestPot_MAXR,_r_)
+#define TestPotW2R(_w_)         MCP4131_W2R(TestPot_MAXR,_w_)
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-//
-// MCP4161
-//
+//
+// MCP4161
+//
 #if 0
 #include "MCP4161.h"
 
 #define TestPot_PORT                        D
 #define TestPot_BIT                         2
 #define TestPot_MAXR                    10000
-#define TestPot_MAX_WIPER   (MCP4161_STEPS-1)
-
-#define TestPotInit             MCP4161Init(TestPot_PORT,TestPot_BIT)
+#define TestPot_MAX_WIPER   (MCP4161_STEPS-1)
+
+#define TestPotInit             MCP4161Init(TestPot_PORT,TestPot_BIT)
 #define TestPotSetWiper(_w_)    MCP4161SetWiper(TestPot_PORT,TestPot_BIT,_w_)
 #define TestPotSetResist(_r_)   MCP4161SetResist(TestPot_PORT,TestPot_BIT,TestPot_MAXR,_r_)
 #define TestPotIncr             MCP4161Incr(TestPot_PORT,TestPot_BIT)
 #define TestPotDecr             MCP4161Decr(TestPot_PORT,TestPot_BIT)
-
-#define TestPotR2W(_r_)         MCP4161_R2W(TestPot_MAXR,_r_)
-#define TestPotW2R(_w_)         MCP4161_W2R(TestPot_MAXR,_w_)
+
+#define TestPotR2W(_r_)         MCP4161_R2W(TestPot_MAXR,_r_)
+#define TestPotW2R(_w_)         MCP4161_W2R(TestPot_MAXR,_w_)
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
-//
-// AD8400
-//
+//
+// AD8400
+//
 #if 1
 #include "AD8400.h"
 
 #define TestPot_PORT                        D
 #define TestPot_BIT                         6
 #define TestPot_MAXR                     1000
-#define TestPot_MAX_WIPER   (AD8400_STEPS-1)
-
-#define TestPotInit             AD8400Init(TestPot_PORT,TestPot_BIT)
+#define TestPot_MAX_WIPER   (AD8400_STEPS-1)
+
+#define TestPotInit             AD8400Init(TestPot_PORT,TestPot_BIT)
 #define TestPotSetWiper(_w_)    AD8400SetWiper(TestPot_PORT,TestPot_BIT,_w_)
 #define TestPotSetResist(_r_)   AD8400SetResist(TestPot_PORT,TestPot_BIT,TestPot_MAXR,_r_)
 #define TestPotIncr             AD8400Incr(TestPot_PORT,TestPot_BIT)
 #define TestPotDecr             AD8400Decr(TestPot_PORT,TestPot_BIT)
-
-#define TestPotR2W(_r_)         AD8400_R2W(TestPot_MAXR,_r_)
-#define TestPotW2R(_w_)         AD8400_W2R(TestPot_MAXR,_w_)
+
+#define TestPotR2W(_r_)         AD8400_R2W(TestPot_MAXR,_r_)
+#define TestPotW2R(_w_)         AD8400_W2R(TestPot_MAXR,_w_)
 #endif
 
 

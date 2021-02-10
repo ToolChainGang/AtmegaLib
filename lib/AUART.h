@@ -86,20 +86,20 @@
 #define ABAUD           9600
 #endif
 
-//
-// Specify the Rx/Tx pins
-//
-#define ARx_PORT        D
-#define ARx_BIT         2
+//
+// Specify the Rx/Tx pins
+//
+#define ARx_PORT        D
+#define ARx_BIT         2
 
-#define ATx_PORT        D
-#define ATx_BIT         3
+#define ATx_PORT        D
+#define ATx_BIT         3
 
 //
 // Specify the timer to use.
 //
 #define ATIMER          2
-
+
 //
 // The serial FIFO's must be a power of two long each, since the code
 //   uses binary wraparounds to access. This system has NO error detection

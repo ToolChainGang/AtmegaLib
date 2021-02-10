@@ -18,16 +18,16 @@
 //      #define TestPot_PORT                    D
 //      #define TestPot_BIT                     3
 //      #define TestPot_MAXR                50000
-//      #define TestPot_MAX_WIPER   MCP4131_STEPS
-//
-//      #define TestPotInit             MCP4131Init(TestPot_PORT,TestPot_BIT)
+//      #define TestPot_MAX_WIPER   MCP4131_STEPS
+//
+//      #define TestPotInit             MCP4131Init(TestPot_PORT,TestPot_BIT)
 //      #define TestPotSetWiper(_w_)    MCP4131SetWiper(TestPot_PORT,TestPot_BIT,_w_)
 //      #define TestPotSetResist(_r_)   MCP4131SetResist(TestPot_PORT,TestPot_BIT,TestPot_MAXR,_r_)
 //      #define TestPotIncr             MCP4131Incr(TestPot_PORT,TestPot_BIT)
 //      #define TestPotDecr             MCP4131Decr(TestPot_PORT,TestPot_BIT)
-//
-//      #define TestPotR2W(_r_)         MCP4131_R2W(TestPot_MAXR,_r_)
-//      #define TestPotW2R(_w_)         MCP4131_W2R(TestPot_MAXR,_w_)
+//
+//      #define TestPotR2W(_r_)         MCP4131_R2W(TestPot_MAXR,_r_)
+//      #define TestPotW2R(_w_)         MCP4131_W2R(TestPot_MAXR,_w_)
 //
 //      //////////////////////////////////////
 //      //

@@ -57,24 +57,24 @@
 
 #ifndef MOTOR0_NEG_LOGIC
 #   define _MOTOR0_OFF                                                              \
-    _CLR_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0));                                     \
+    _CLR_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0));                                     \
 
 #   define _MOTOR0_FWD                                                              \
-    _SET_MASK(_PORT(MOTOR0_PORT),_FWD_MASK(0));                                     \
+    _SET_MASK(_PORT(MOTOR0_PORT),_FWD_MASK(0));                                     \
 
 #   define _MOTOR0_REV                                                              \
-    _SET_MASK(_PORT(MOTOR0_PORT),_REV_MASK(0));                                     \
+    _SET_MASK(_PORT(MOTOR0_PORT),_REV_MASK(0));                                     \
 
 #   define MOTOR0_GET   (_GET_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0)) ^ _OFF_MASK(0))
 #else
 #   define _MOTOR0_OFF                                                              \
-    _SET_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0));                                     \
+    _SET_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0));                                     \
 
 #   define _MOTOR0_FWD                                                              \
-    _CLR_MASK(_PORT(MOTOR0_PORT),_FWD_MASK(0));                                     \
+    _CLR_MASK(_PORT(MOTOR0_PORT),_FWD_MASK(0));                                     \
 
 #   define _MOTOR0_REV                                                              \
-    _CLR_MASK(_PORT(MOTOR0_PORT),_REV_MASK(0));                                     \
+    _CLR_MASK(_PORT(MOTOR0_PORT),_REV_MASK(0));                                     \
 
 #   define MOTOR0_GET   _GET_MASK(_PORT(MOTOR0_PORT),_OFF_MASK(0))
 #endif
@@ -82,24 +82,24 @@
 
 #ifndef MOTOR1_NEG_LOGIC
 #   define _MOTOR1_OFF                                                              \
-    _CLR_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1));                                     \
+    _CLR_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1));                                     \
 
 #   define _MOTOR1_FWD                                                              \
-    _SET_MASK(_PORT(MOTOR1_PORT),_FWD_MASK(1));                                     \
+    _SET_MASK(_PORT(MOTOR1_PORT),_FWD_MASK(1));                                     \
 
 #   define _MOTOR1_REV                                                              \
-    _SET_MASK(_PORT(MOTOR1_PORT),_REV_MASK(1));                                     \
+    _SET_MASK(_PORT(MOTOR1_PORT),_REV_MASK(1));                                     \
 
 #   define MOTOR1_GET   (_GET_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1)) ^ _OFF_MASK(1))
 #else
 #   define _MOTOR1_OFF                                                              \
-    _SET_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1));                                     \
+    _SET_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1));                                     \
 
 #   define _MOTOR1_FWD                                                              \
-    _CLR_MASK(_PORT(MOTOR1_PORT),_FWD_MASK(1));                                     \
+    _CLR_MASK(_PORT(MOTOR1_PORT),_FWD_MASK(1));                                     \
 
 #   define _MOTOR1_REV                                                              \
-    _CLR_MASK(_PORT(MOTOR1_PORT),_REV_MASK(1));                                     \
+    _CLR_MASK(_PORT(MOTOR1_PORT),_REV_MASK(1));                                     \
 
 #   define MOTOR1_GET   _GET_MASK(_PORT(MOTOR1_PORT),_OFF_MASK(1))
 #endif
@@ -107,24 +107,24 @@
 
 #ifndef MOTOR2_NEG_LOGIC
 #   define _MOTOR2_OFF                                                              \
-    _CLR_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2));                                     \
+    _CLR_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2));                                     \
 
 #   define _MOTOR2_FWD                                                              \
-    _SET_MASK(_PORT(MOTOR2_PORT),_FWD_MASK(2));                                     \
+    _SET_MASK(_PORT(MOTOR2_PORT),_FWD_MASK(2));                                     \
 
 #   define _MOTOR2_REV                                                              \
-    _SET_MASK(_PORT(MOTOR2_PORT),_REV_MASK(2));                                     \
+    _SET_MASK(_PORT(MOTOR2_PORT),_REV_MASK(2));                                     \
 
 #   define MOTOR2_GET   (_GET_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2)) ^ _OFF_MASK(2))
 #else
 #   define _MOTOR2_OFF                                                              \
-    _SET_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2));                                     \
+    _SET_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2));                                     \
 
 #   define _MOTOR2_FWD                                                              \
-    _CLR_MASK(_PORT(MOTOR2_PORT),_FWD_MASK(2));                                     \
+    _CLR_MASK(_PORT(MOTOR2_PORT),_FWD_MASK(2));                                     \
 
 #   define _MOTOR2_REV                                                              \
-    _CLR_MASK(_PORT(MOTOR2_PORT),_REV_MASK(2));                                     \
+    _CLR_MASK(_PORT(MOTOR2_PORT),_REV_MASK(2));                                     \
 
 #   define MOTOR2_GET   _GET_MASK(_PORT(MOTOR2_PORT),_OFF_MASK(2))
 #endif
@@ -132,31 +132,31 @@
 
 #ifndef MOTOR3_NEG_LOGIC
 #   define _MOTOR3_OFF                                                              \
-    _CLR_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3));                                     \
+    _CLR_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3));                                     \
 
 #   define _MOTOR3_FWD                                                              \
-    _SET_MASK(_PORT(MOTOR3_PORT),_FWD_MASK(3));                                     \
+    _SET_MASK(_PORT(MOTOR3_PORT),_FWD_MASK(3));                                     \
 
 #   define _MOTOR3_REV                                                              \
-    _SET_MASK(_PORT(MOTOR3_PORT),_REV_MASK(3));                                     \
+    _SET_MASK(_PORT(MOTOR3_PORT),_REV_MASK(3));                                     \
 
 #   define MOTOR3_GET   (_GET_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3)) ^ _OFF_MASK(3))
 #else
 #   define _MOTOR3_OFF                                                              \
-    _SET_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3));                                     \
+    _SET_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3));                                     \
 
 #   define _MOTOR3_FWD                                                              \
-    _CLR_MASK(_PORT(MOTOR3_PORT),_FWD_MASK(3));                                     \
+    _CLR_MASK(_PORT(MOTOR3_PORT),_FWD_MASK(3));                                     \
 
 #   define _MOTOR3_REV                                                              \
-    _CLR_MASK(_PORT(MOTOR3_PORT),_REV_MASK(3));                                     \
+    _CLR_MASK(_PORT(MOTOR3_PORT),_REV_MASK(3));                                     \
 
 #   define MOTOR3_GET   _GET_MASK(_PORT(MOTOR3_PORT),_OFF_MASK(3))
 #endif
 
 #define _MOTOR_INIT(_id_)                                                           \
     _MOTOR##_id_##_OFF                                                              \
-    _SET_MASK(_DDR(MOTOR##_id_##_PORT),_OFF_MASK(_id_));                            \
+    _SET_MASK(_DDR(MOTOR##_id_##_PORT),_OFF_MASK(_id_));                            \
 
 #define _MOTOR_SET(_id_)                                                            \
     case _id_:                                                                      \
