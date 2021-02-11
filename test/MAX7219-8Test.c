@@ -13,7 +13,7 @@
 //      Connect all   MAX7219 LOAD pins to PORTD.3
 //      Connect all   MAX7219 CLK  pins to PORTD.4
 //      
-//      Run this program. The LED matrix should scroll the alphabit
+//      Run this program. The LED matrix should scroll the alphabet
 //
 //  DESCRIPTION
 //
@@ -129,3 +129,4 @@ int main(void) {
         PrintCRLF();
         }
     }
+
