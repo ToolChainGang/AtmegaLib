@@ -4,13 +4,13 @@ A bog-standard set of Arduino hardware interface libraries...
 
 With test programs!
 
-You can test hardware sections in isolation by running individual test programs found in this project.
+You can test hardware sections in isolation by running test programs found in this project.
 
 The interfaces can be port-configured to conform to your specific hardware. For example,
 the stepper interface can be configured to use any three GPIO pins (step, dir, enb).
 
-Many test programs accept serial commands to exercise the hardware. For example, the stepper motor
-test program "SteperPulse.c" accepts the following commands:
+Many test programs are supplied that accept serial commands to exercise the hardware. For example,
+the stepper motor test program "SteperPulse.c" accepts the following commands:
 
 ````bash
 +      # Go faster (by 10%)
@@ -139,11 +139,13 @@ Output device test programs of the form xxxCmd take commands over the serial por
 specific hardware. Programs of the form xxxTest continuously run a demo program of some sort that
 exercises the hardware, allowing the engineer to focus on the electrical interface.
 
-For example, the program ServoCmd allows the user to set the servo to a specific position by
-serial command. The program ServoTest continuously moves the servo Left->Middle->Right->Middle, pausing
+For example:
+
+* ServoCmd allows the user to set the servo to a specific position by serial command.
+* ServoTest continuously moves the servo Left->Middle->Right->Middle, pausing
 at each position.
 
-The following test programs are supplied with the system.
+Test programs in the project:
 
 ````bash
 AD9834Test          # Generate sin/sq/ frequencies by command
@@ -187,9 +189,9 @@ ZCrossTest          # Count and report zero crossings
 
 ## Documentation
 
-Comprehensive device documentation is included in the .h file for each device.
+Comprehensive documentation is included in the .h file for each device.
 
-Documentation for any xxxCmd test programs is at the top of the source for that program.
+Documentation for the test programs is at the top of the source for that program.
 
 Here's an example, from Stepper.h:
 
@@ -264,4 +266,4 @@ Here's an example, from Stepper.h:
 
 All files depend on AVR libc. These are standard, but it shouldn't be too hard to port to a
 different development environment if needed. Most of the dependence is in .h files
-like <stdint> and <string.h> and <stdbool.h> that you should be using anyway.
+like <stdint.h> and <string.h> and <stdbool.h> that you should be using anyway.
