@@ -1,0 +1,200 @@
+########################################################################################################################
+########################################################################################################################
+##
+##      Copyright (C) 2021 Rajstennaj Barrabas, Milford, NH 03055
+##      All Rights Reserved under the MIT license as outlined below.
+##
+##  FILE
+##
+##      CMakeMacros     Useful macros for CMake files
+##
+########################################################################################################################
+##
+##  MIT LICENSE
+##
+##  Permission is hereby granted, free of charge, to any person obtaining a copy of
+##    this software and associated documentation files (the "Software"), to deal in
+##    the Software without restriction, including without limitation the rights to
+##    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+##    of the Software, and to permit persons to whom the Software is furnished to do
+##    so, subject to the following conditions:
+##
+##  The above copyright notice and this permission notice shall be included in
+##    all copies or substantial portions of the Software.
+##
+##  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+##    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+##    PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+##    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+##    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+##    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+##
+########################################################################################################################
+########################################################################################################################
+
+#
+# Special settings for AVR compiles
+#
+macro(SetAVR CPU_TYPE CPU_SPEED)
+    SET(CMAKE_SYSTEM_NAME Generic)
+
+    SET(CMAKE_C_COMPILER    avr-gcc)
+    SET(CMAKE_CXX_COMPILER  avr-g++)
+
+    SET(CSTANDARD   "-std=gnu99")
+    SET(CDEBUG      "-gstabs")
+    SET(CWARN       "-Wall -Wstrict-prototypes")
+    SET(CTUNING     "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums")
+    SET(COPT        "-Os")
+    SET(CINCS       "-I${Candi_SOURCE_DIR}/libarduino")
+    SET(CMCU        "-mmcu=${CPU_TYPE}")
+    SET(CDEFS       "-DF_CPU=${CPU_SPEED}")
+
+    SET(CFLAGS   "${CMCU} ${CDEBUG} ${CDEFS} ${CINCS} ${COPT} ${CWARN} ${CSTANDARD} ${CEXTRA}")
+    SET(CXXFLAGS "${CMCU} ${CDEFS} ${CINCS} ${COPT}")
+
+    SET(CMAKE_C_FLAGS   ${CFLAGS})
+    SET(CMAKE_CXX_FLAGS ${CXXFLAGS})
+
+    set(CMAKE_INSTALL_PREFIX ${CPU_TYPE})
+    endmacro()
+
+macro(AVR_CREATE_HEX name)
+    if( ${CMAKE_SYSTEM_NAME} STREQUAL "Generic")
+        ADD_CUSTOM_COMMAND(TARGET ${name} POST_BUILD COMMAND avr-objcopy ARGS -O ihex -R.eeprom ${name} "/home/Kibaro/class.hex")
+        endif()
+    endmacro(AVR_CREATE_HEX)
+
+########################################################################################################################
+
+#message(STATUS "test")
+
+if(DEFINED DEBUG_ASSERT)
+    add_compile_definitions(DEBUG_ASSERT)
+    endif()
+
+macro(PrintIncludeDirs)
+    get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+    foreach(dir ${dirs})
+        message(STATUS "***include='${dir}'")
+        endforeach()
+    endmacro()
+
+macro(PrintCFlags Target)
+    get_property(flags TARGET ${Target} PROPERTY ${COMPILE_OPTIONS} SET)
+    foreach(flag ${flags})
+        message(STATUS "***GCC '${flag}'")
+        endforeach()
+    endmacro()
+
+function(PrintTargetProperties Target)
+
+    if(NOT TARGET ${Target})
+        message("***There is no target named '${Target}'")
+        return()
+    endif()
+
+    message("***Configuration for target '${Target}':")
+
+    set(CMAKE_PROPERTY_LIST SOURCE_DIR BINARY_DIR COMPILE_DEFINITIONS
+             COMPILE_OPTIONS INCLUDE_DIRECTORIES LINK_LIBRARIES CXX_STANDARD)
+
+    foreach (propname ${CMAKE_PROPERTY_LIST})
+        get_property(propval TARGET ${Target} PROPERTY ${propname} SET)
+
+        if( "${propname}" STREQUAL "LINK_LIBRARIES" )
+            message(STATUS "   ${propname}: ")
+            get_target_property(libs ${Target} ${propname})
+            foreach(lib ${libs})
+                message(STATUS "      '${lib}'")
+                endforeach()
+
+        elseif( "${propname}" STREQUAL "INCLUDE_DIRECTORIES" )
+            message(STATUS "   ${propname}: ")
+            get_target_property(dirs ${Target} ${propname})
+            foreach(dir ${dirs})
+                message(STATUS "      '${dir}'")
+                endforeach()
+
+        elseif(propval)
+            get_target_property(propval ${Target} ${propname})
+            message (STATUS "   ${propname} = ${propval}")
+            endif()
+
+        endforeach(propname)
+
+    endfunction(PrintTargetProperties)
+
+########################################################################################################################
+
+macro(TargetLib Lib)
+    if("${Sources}" STREQUAL "")
+        add_library(${Lib}  INTERFACE)
+    else ()
+        add_library(${Lib} ${Sources} ${Headers})
+        endif("${Sources}" STREQUAL "")
+    install    (TARGETS   ${Lib})
+    install    (FILES     ${Headers} DESTINATION include)
+    endmacro()
+
+macro(TargetExec Exec)
+    set(Libs "${ARGN}")
+
+    if(     EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${Exec}.cpp")
+        message("${Exec}.cpp exists.")
+        set(MainSource "${Exec}.cpp")
+    elseif( EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${Exec}.c" )
+        set(MainSource "${Exec}.c")
+    else()
+        message("${Exec}: No source file found.")
+        endif()
+
+#    message (STATUS "dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+#    message (STATUS "MainSource: ${MainSource}")
+
+    add_executable       (${Exec} ${MainSource} ${Sources})
+
+    if( ${CMAKE_SYSTEM_NAME} STREQUAL "Generic")
+        AVR_CREATE_HEX(${Exec})
+        endif()
+
+    target_link_libraries(${Exec} ${Libs})
+    install              (TARGETS ${Exec})
+
+#    PrintIncludeDirs()
+    endmacro()
+
+macro(TargetIFace IFace)
+    add_library(${IFace}  INTERFACE)
+    install    (TARGETS   ${Lib})
+    install    (FILES     ${Headers} DESTINATION include)
+    endmacro()
+
+macro(TestExec Exec)
+
+    set(Libs "${ARGN}")
+
+    if(DEFINED DEBUG_ASSERT)
+        list(APPEND Libs Common)
+        endif()
+
+#    message(STATUS "***Exec='${Exec}:'")
+    add_executable(${Exec} ${Exec}.cpp)
+    target_link_libraries(${Exec} Test ${Libs})
+#    add_test(NAME ${Exec} COMMAND ${Exec})
+    add_test(NAME "Valgrind${Exec}" COMMAND valgrind --leak-check=yes ${Exec})
+
+    endmacro()
+
+macro(CompareExec Exec CompareFile)
+
+    set(Libs "${ARGN}")
+
+    if(DEFINED DEBUG_ASSERT)
+        list(APPEND Libs Common)
+        endif()
+
+    add_executable(${Exec} ${Exec}.cpp)
+    target_link_libraries(${Exec} Test ${Libs})
+    add_test(NAME ${Exec} COMMAND "${Exec} >/tmp/${Exec}.txt; diff /tmp/${Exec}.txt ${InFile}")
+    endmacro()
