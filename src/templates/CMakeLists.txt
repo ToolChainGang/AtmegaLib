@@ -32,15 +32,4 @@
 ########################################################################################################################
 ########################################################################################################################
 
-#
-# NOTE: MAScreen.c to be supplied by the application. See templates/MAScreen.c
-#
-
-set(Sources Command.c CustomScreens.c Debug.c Parse2ch.c Parse.c Screen.c)
-set(Headers Command.h CustomScreens.h Debug.h Parse2ch.h Parse.h Screen.h VT100.h)
-
-list(APPEND Sources DEScreen.c Dump.c EEScreen.c GetLine.c HEScreen.c            MEScreen.c)
-list(APPEND Headers DEScreen.h Dump.h EEScreen.h GetLine.h HEScreen.h MAScreen.h MEScreen.h)
-
-TargetLib(Screen)
-
+install(FILES MAScreen.c DESTINATION  templates)

@@ -1,26 +1,17 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//      Copyright (C) 2016 Peter Walsh, Milford, NH 03055
+//      Copyright (C) 2010 Rajstennaj Barrabas, Milford, NH 03055
 //      All Rights Reserved under the MIT license as outlined below.
 //
 //  FILE
-//      EncoderTest.c
+//      ADNSTest.c
 //
 //  SYNOPSIS
 //
-//      Connect an encoder to PORTA.1 and PORTA.2 and a serial monitor (ie - PC running
-//        hyperterm) to the serial port.
-//
-//      Compile, load, and run this module. The system will report all encoder
-//        changes with a message to the serial port.
-//
 //  DESCRIPTION
 //
-//      This program tests the Encoder interface.
-//
-//      You can easily change the pin and port assignments to suit your needs,
-//        see Encoder.h for details.
+//      A simple AVR program to interface/explore the ADNS-2610 optical flow sensor.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -46,44 +37,45 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <avr/sleep.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "ADNS2610.h"
 
+#include "Timer.h"
 #include "UART.h"
 #include "Serial.h"
-#include "Encoder.h"
-#include "PortMacros.h"
+
+#define UPDATE_MS  1000             // mS of on time between update msgs
+
+static uint16_t TotalX NOINIT;
+static uint16_t TotalY NOINIT;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// LimitState - Report the state of a button
+// ADNS2610Test - Test the Serial port with continuous output & input
 //
 // Inputs:      None. (Embedded program - no command line options)
 //
 // Outputs:     None. (Never returns)
 //
-MAIN main(void) {
+int main(void) {
 
     //
     // Initialize the timer and button system
     //
-    EncoderInit();                      // Initialize encoder system
+    ADNS2610Init();                     // Initialize optical flow sensor
     UARTInit();                         // For serial I/O
-
-    set_sleep_mode(SLEEP_MODE_IDLE);
-    sleep_enable();
 
     sei();                              // Enable interrupts
 
     PrintCRLF();
     PrintCRLF();
     PrintCRLF();
-    PrintString("Reset EncoderTest.\r\n");
+    PrintString("Reset ADNS2610Test.\r\n");
     PrintCRLF();
-    PrintString("Twist encoder shaft to see values.");
+    PrintString("Move chip over surface to see values change.");
     PrintCRLF();
     PrintCRLF();
 
@@ -91,37 +83,39 @@ MAIN main(void) {
     //
     // All done with init,
     // 
-    ENCODER_T   PrevPos = 0;
+    PutADNS2610Byte(0x00,0x01);             // Continuous (ie - non-sleep) mode
 
+    TotalX = 0;
+    TotalY = 0;
+
+    //    ADNS_Config = 0,   // 0x00 Configuration 0x00 Reset, Power Down, Forced Awake, etc
+    //    ADNS_Status,       // 0x01 Product ID, Mouse state of Asleep or Awake
+    //    ADNS_DeltaY,       // 0x02 Delta_Y Y Movement
+    //    ADNS_DeltaX,       // 0x03 Delta_X X Movement
+    //    ADNS_SQUAL ,       // 0x04 Measure of the number of features visible by the sensor
+    //    ADNS_MaxPx ,       // 0x05 Maximum_Pixel
+    //    ADNS_MinPx ,       // 0x06 Minimum_Pixel
+    //    ADNS_PxSum ,       // 0x07 Pixel_Sum 
+    //    ADNS_Data  ,       // 0x08 Pixel Data Actual picture of surface
+    //    ADNS_ShutUp,       // 0x09 Shutter_Upper
+    //    ADNS_ShutLw,       // 0x0A Shutter_Lower
+    //    ADNS_IProd  = 0x11 // 0x11 Inverse Product ID
+    //
     while(1) {
-        sleep_cpu();
+        _delay_ms(UPDATE_MS);                // Wait 1/2 cycle
 
-        ENCODER_T EncoderPos = GetEncoder();
-        if( EncoderPos == PrevPos )
-            continue;
+        uint8_t DeltaX = GetADNS2610Byte(ADNS2610_DeltaX);
+        TotalX += DeltaX;
 
-        if( EncoderPos < 0 ) {
-            PrintChar('-');
-            PrintD(-EncoderPos,0);
-            }
-        else PrintD(EncoderPos,0);
+        uint8_t DeltaY = GetADNS2610Byte(ADNS2610_DeltaY);
+        TotalY += DeltaY;
+
+        PrintStringP(PSTR("("));
+        PrintD(DeltaX,4);
+        PrintChar(',');
+        PrintD(DeltaY,4);
+        PrintStringP(PSTR(")"));
+
         PrintCRLF();
-
-        PrevPos = EncoderPos;
         }
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// EncoderISR - Interrupt routine called when encoder changes state
-//
-// Inputs:      Pin state of encoder, shifted to low order bits
-//
-// Outputs:     None.
-//
-void EncoderISR(uint8_t EncoderBits) {
-
-//    PrintB(EncoderBits);
-//    PrintCRLF();
     }

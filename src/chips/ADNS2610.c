@@ -15,7 +15,7 @@
 //
 //      //////////////////////////////////////
 //      //
-//      // In ADNS.h
+//      // In ADNS2610.h
 //      //
 //      ...Choose a speed                  (Default: FOsc/8 == 2 MHz)
 //
@@ -23,9 +23,9 @@
 //      //
 //      // In main.c
 //      //
-//      ADNSInit();                         // Called once at startup
+//      ADNS2610Init();                     // Called once at startup
 //
-//      PutADNSByte('A');                   // Blocks until complete
+//      PutADNS2610Byte('A');               // Blocks until complete
 //
 //      uint8_t InChar = GetUARTByte();     // Blocks until complete
 //
@@ -93,7 +93,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// ADNSInit - Initialize ADNS
+// ADNS2610Init - Initialize ADNS
 //
 // This routine initializes the ADNS based on the settings above. Called from
 //   init.
@@ -102,7 +102,7 @@
 //
 // Outputs:     None.
 //
-void ADNSInit(void) {
+void ADNS2610Init(void) {
 
     _CLR_BIT(PRR,PRSPI);                        // Power up the SPI
 
@@ -131,7 +131,7 @@ void ADNSInit(void) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PutADNSByte - Send one byte out the ADNS port
+// PutADNS2610Byte - Send one byte out the ADNS port
 //
 // Send a byte out the ADNS port, block until completion.
 //
@@ -140,7 +140,7 @@ void ADNSInit(void) {
 //
 // Outputs:     None.
 //
-void PutADNSByte(ADNS_REG_T Addr,uint8_t Data) {
+void PutADNS2610Byte(ADNS2610_REG_T Addr,uint8_t Data) {
 
     MOSI_WRITE;         // Enable MOSI
 
@@ -155,7 +155,7 @@ void PutADNSByte(ADNS_REG_T Addr,uint8_t Data) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// GetADNSByte - Get one byte from the ADNS port
+// GetADNS2610Byte - Get one byte from the ADNS port
 //
 // Get a byte from the ADNS port, block until completion.
 //
@@ -163,7 +163,7 @@ void PutADNSByte(ADNS_REG_T Addr,uint8_t Data) {
 //
 // Outputs:     Received byte
 //
-uint8_t GetADNSByte(ADNS_REG_T Addr) {
+uint8_t GetADNS2610Byte(ADNS2610_REG_T Addr) {
     //
     // Output 1 byte while keeping MOSI offline. This generates the clock and shifts
     //   data into the SPI, while keeping the output data offline.

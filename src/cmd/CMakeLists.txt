@@ -33,14 +33,23 @@
 ########################################################################################################################
 
 #
-# NOTE: MAScreen.c to be supplied by the application. See templates/MAScreen.c
+# Traditionally, we should only load the individual libraries needed for any test program.
+#   Right now I'm too lazy, and it doesn't matter: just load them all and let the linker
+#   sort them out.
 #
+set(AllLibs Screen Chips IO Atmega)
 
-set(Sources Command.c CustomScreens.c Debug.c Parse2ch.c Parse.c Screen.c)
-set(Headers Command.h CustomScreens.h Debug.h Parse2ch.h Parse.h Screen.h VT100.h)
-
-list(APPEND Sources DEScreen.c Dump.c EEScreen.c GetLine.c HEScreen.c            MEScreen.c)
-list(APPEND Headers DEScreen.h Dump.h EEScreen.h GetLine.h HEScreen.h MAScreen.h MEScreen.h)
-
-TargetLib(Screen)
-
+TargetExec(BlinkLED         ${AllLibs})
+#TargetExec(Digital3PotCmd   ${AllLibs})
+TargetExec(DigitalLogger    ${AllLibs})
+TargetExec(DigitalPotCmd    ${AllLibs})
+TargetExec(ESP8266Cmd       ${AllLibs})
+TargetExec(I2CCmd           ${AllLibs})
+TargetExec(MotorCmd         ${AllLibs})
+TargetExec(MotorPWMCmd      ${AllLibs})
+TargetExec(PortMonitor      ${AllLibs})
+TargetExec(PulseGenerator   ${AllLibs})
+TargetExec(ServoCmd         ${AllLibs})
+TargetExec(SetOutput        ${AllLibs})
+TargetExec(SqWaveCmd        ${AllLibs})
+#TargetExec(StepperPulse     ${AllLibs})

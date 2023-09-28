@@ -15,7 +15,7 @@
 //
 //      //////////////////////////////////////
 //      //
-//      // In ADNS.h
+//      // In ADNS2610.h
 //      //
 //      ...Choose a speed                  (Default: FOsc/8 == 2 MHz)
 //
@@ -23,18 +23,18 @@
 //      //
 //      // In main.c
 //      //
-//      ADNSInit();                         // Called once at startup
+//      ADNS2610Init();                     // Called once at startup
 //
-//      PutADNSByte('A');                   // Blocks until complete
+//      PutADNS2610Byte('A');               // Blocks until complete
 //
 //      uint8_t InChar = GetUARTByte();     // Blocks until complete
 //
 //  DESCRIPTION
 //
-//      A simple driver module for blocking communications with ADNS-xxxx
+//      A simple driver module for blocking communications with ADNS2610
 //        optical flow sensors on an AVR processor.
 //
-//      The baud rate is set in the ADNS.h file.
+//      The baud rate is set in the ADNS2610.h file.
 //
 //  NOTE
 //
@@ -67,8 +67,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef ADNS_H
-#define ADNS_H
+#ifndef ADNS2610_H
+#define ADNS2610_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -78,11 +78,11 @@
 //
 // Choose the speed based on the table in the hardware manual
 //
-#ifndef ADNS_SPEED
-#define ADNS_SPEED       (1 << SPR0)        // == 1 MHz serial clock
+#ifndef ADNS2610_SPEED
+#define ADNS2610_SPEED       (1 << SPR0)        // == 1 MHz serial clock
 #endif
 
-#define ADNS2X                              // 1MHz => 2MHz clock
+#define ADNS26102X                              // 1MHz => 2MHz clock
 
 //
 // End of user configurable options
@@ -91,58 +91,58 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef enum {
-    ADNS_Config = 0,   // 0x00 Configuration 0x00 Reset, Power Down, Forced Awake, etc
-    ADNS_Status,       // 0x01 Product ID, Mouse state of Asleep or Awake
-    ADNS_DeltaY,       // 0x02 Delta_Y Y Movement
-    ADNS_DeltaX,       // 0x03 Delta_X X Movement
-    ADNS_SQUAL ,       // 0x04 Measure of the number of features visible by the sensor
-    ADNS_MaxPx ,       // 0x05 Maximum_Pixel
-    ADNS_MinPx ,       // 0x06 Minimum_Pixel
-    ADNS_PxSum ,       // 0x07 Pixel_Sum 
-    ADNS_Data  ,       // 0x08 Pixel Data Actual picture of surface
-    ADNS_ShutUp,       // 0x09 Shutter_Upper
-    ADNS_ShutLw,       // 0x0A Shutter_Lower
-    ADNS_IProd  = 0x11 // 0x11 Inverse Product ID
-    } ADNS_REG_T;
+    ADNS2610_Config = 0,   // 0x00 Configuration 0x00 Reset, Power Down, Forced Awake, etc
+    ADNS2610_Status,       // 0x01 Product ID, Mouse state of Asleep or Awake
+    ADNS2610_DeltaY,       // 0x02 Delta_Y Y Movement
+    ADNS2610_DeltaX,       // 0x03 Delta_X X Movement
+    ADNS2610_SQUAL ,       // 0x04 Measure of the number of features visible by the sensor
+    ADNS2610_MaxPx ,       // 0x05 Maximum_Pixel
+    ADNS2610_MinPx ,       // 0x06 Minimum_Pixel
+    ADNS2610_PxSum ,       // 0x07 Pixel_Sum 
+    ADNS2610_Data  ,       // 0x08 Pixel Data Actual picture of surface
+    ADNS2610_ShutUp,       // 0x09 Shutter_Upper
+    ADNS2610_ShutLw,       // 0x0A Shutter_Lower
+    ADNS2610_IProd  = 0x11 // 0x11 Inverse Product ID
+    } ADNS2610_REG_T;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// ADNSInit - Initialize ADNS
+// ADNS2610Init - Initialize ADNS2610
 //
-// This routine initializes the ADNS based on the settings above. Called from init.
+// This routine initializes the ADNS2610 based on the settings above. Called from init.
 //
 // Inputs:      None.
 //
 // Outputs:     None.
 //
-void ADNSInit(void);
+void ADNS2610Init(void);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// PutADNSByte - Send one byte out the ADNS port
+// PutADNS2610Byte - Send one byte out the ADNS2610 port
 //
-// Send a byte to the ADNS device, and block until complete.
+// Send a byte to the ADNS2610 device, and block until complete.
 //
 // Inputs:      Address of register to write
 //              Data for register
 //
 // Outputs:     None.
 //
-void PutADNSByte(ADNS_REG_T Addr,uint8_t Data);
+void PutADNS2610Byte(ADNS2610_REG_T Addr,uint8_t Data);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// GetADNSByte - Get one char from the ADNS device
+// GetADNS2610Byte - Get one char from the ADNS2610 device
 //
-// Get a char from the ADNS device, and block until complete.
+// Get a char from the ADNS2610 device, and block until complete.
 //
 // Inputs:      Address of register to read
 //
 // Outputs:     Data in register
 //
-uint8_t GetADNSByte(ADNS_REG_T Addr);
+uint8_t GetADNS2610Byte(ADNS2610_REG_T Addr);
 
-#endif // ADNS_H - entire file
+#endif // ADNS2610_H - entire file

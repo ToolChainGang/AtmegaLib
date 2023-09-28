@@ -39,14 +39,17 @@
 ########################################################################################################################
 ########################################################################################################################
 
-include_directories(BEFORE test)
 include_directories(BEFORE screen)
 include_directories(BEFORE io)
 include_directories(BEFORE chips)
 include_directories(BEFORE atmega)
+include_directories(BEFORE test)
+include_directories(BEFORE cmd)
 
 add_subdirectory(screen)
 add_subdirectory(io)
 add_subdirectory(chips)
 add_subdirectory(atmega)
 add_subdirectory(test)
+add_subdirectory(cmd)
+add_subdirectory(templates)

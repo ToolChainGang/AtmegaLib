@@ -5,24 +5,33 @@
 //      All Rights Reserved under the MIT license as outlined below.
 //
 //  FILE
-//      EncoderTest.c
+//      DigitalLogger.c
 //
 //  SYNOPSIS
 //
-//      Connect an encoder to PORTA.1 and PORTA.2 and a serial monitor (ie - PC running
-//        hyperterm) to the serial port.
+//      //////////////////////////////////////
+//      //
+//      // In Limit.h
+//      //
+//      ...Choose a port                   (Default: PortC)
+//      ...Choose bits within a port       (Default: bits 0 and 1)
 //
-//      Compile, load, and run this module. The system will report all encoder
-//        changes with a message to the serial port.
+//      Connect up to 8 switches to PORTC and a serial monitor (ie - PC running
+//        hyperterm) to the serial port. 
+//
+//      Compile, load, and run this module. When any switch changes state, the
+//        system will report the time (since reset) and the new state.
 //
 //  DESCRIPTION
 //
-//      This program tests the Encoder interface.
+//      This program is a simple binary data logger with up to 8 inputs.
 //
 //      You can easily change the pin and port assignments to suit your needs,
-//        see Encoder.h for details.
+//        see Limit.h for details.
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//      The input can be easily captured on a PC for later analysis.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  MIT LICENSE
 //
@@ -43,23 +52,22 @@
 //    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
-#include "ADNS2610.h"
-
 #include "UART.h"
 #include "Serial.h"
-#include "Encoder.h"
+#include "Limit.h"
+#include "TimerB.h"
 #include "PortMacros.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// LimitState - Report the state of a button
+// DigitalLogger - Report switch changes with timestamp
 //
 // Inputs:      None. (Embedded program - no command line options)
 //
@@ -70,7 +78,10 @@ MAIN main(void) {
     //
     // Initialize the timer and button system
     //
-    EncoderInit();                      // Initialize encoder system
+    _CLR_BIT(MCUCR,PUD);                // Allow I/O pullups
+
+    LimitInit();                        // Initialize debounce system
+    TimerBInit();                       // For timestamp and updates
     UARTInit();                         // For serial I/O
 
     set_sleep_mode(SLEEP_MODE_IDLE);
@@ -78,50 +89,69 @@ MAIN main(void) {
 
     sei();                              // Enable interrupts
 
-    PrintCRLF();
-    PrintCRLF();
-    PrintCRLF();
-    PrintString("Reset EncoderTest.\r\n");
-    PrintCRLF();
-    PrintString("Twist encoder shaft to see values.");
-    PrintCRLF();
-    PrintCRLF();
+    PrintString("Reset.\r\n");
 
     //////////////////////////////////////////////////////////////////////////////////////
     //
     // All done with init,
     // 
-    ENCODER_T   PrevPos = 0;
-
-    while(1) {
+    while(1)
         sleep_cpu();
-
-        ENCODER_T EncoderPos = GetEncoder();
-        if( EncoderPos == PrevPos )
-            continue;
-
-        if( EncoderPos < 0 ) {
-            PrintChar('-');
-            PrintD(-EncoderPos,0);
-            }
-        else PrintD(EncoderPos,0);
-        PrintCRLF();
-
-        PrevPos = EncoderPos;
-        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// EncoderISR - Interrupt routine called when encoder changes state
+// LimitISR - Called by the button system at each change
 //
-// Inputs:      Pin state of encoder, shifted to low order bits
+// Inputs:      Current state of buttons
 //
 // Outputs:     None.
 //
-void EncoderISR(uint8_t EncoderBits) {
+void LimitISR(uint8_t Limits) {
+    TIME_T Time = TimerBGetSeconds();
+    uint8_t Secs, Mins, Hrs, Days;
 
-//    PrintB(EncoderBits);
-//    PrintCRLF();
+    Secs = Time % 60;
+    Time = Time / 60;
+
+    Mins = Time % 60;
+    Time = Time / 60;
+
+    Hrs  = Time % 24;
+    Time = Time / 24;
+
+    Days = Time % 365;
+
+    //
+    // Print out the timestamp
+    //
+    PrintD(Days,103);           // => printf("%03d",Value);
+    PutUARTByteW('.');
+    PrintD(Hrs,102);            // => printf("%02d",Value);
+    PutUARTByteW('.');
+    PrintD(Mins,102);           // => printf("%02d",Value);
+    PutUARTByteW('.');
+    PrintD(Secs,102);           // => printf("%02d",Value);
+    PutUARTByteW(':');
+    PutUARTByteW(' ');
+
+    //
+    // Print out the new state
+    //
+    PrintH(Limits);
+    PrintCRLF();
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// TimerBISR - Called by the timer section once a tick
+//
+// Inputs:      None.
+//
+// Outputs:     None.
+//
+void TimerBISR(void) {
+    LimitUpdate(MS_PER_TICK);
     }
